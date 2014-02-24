@@ -1,39 +1,40 @@
 #!/bin/bash
-#read clonenames into a array
-#append name of repo onto git clone 
-#make directory of of name of person 
-#execute git clone
-#repeat until end of array
 
-declare -a array
-exec 10<&0
-exec<$1
-let count=0
+function exists() {
+	local url=$@
+	wget -O/dev/null -q $url
+	return $?
+}
 
-while read LINE; do
-	ARRAY[$count]=$LINE
-	((count++))
-done
+outfile="$PWD/$2"
+if [ -f $outfile ]; then
+	rm $outfile
+fi
+touch $outfile
 
-echo Number of elements :${#ARRAY[@]}
-echo ${ARRAY[@]}
-exec 0<&10 10<&-
-
-ARRAY2=(CS452-LAB1 CS452-LAB2 CS452-LAB3 CS452-LAB4)
-
-COUNT=${#ARRAY[@]}
-NUMLAB=0
-
-while [ $COUNT -gt 0 ]; do
-	mkdir $ARRAY
-	echo $ARRAY
-	until [ $NUMLAB -gt 3 ]; do
-	echo $NUMLAB
-	echo $ARRAY
-	echo $ARRAY2
-		git clone https://github.com/$ARRAY/$ARRAY2.git
-		let NUMLAB=NUMLAB+1
+for stu in $(cat $1); do
+	echo "Student: $stu"
+	mkdir -p $stu
+	pushd $stu > /dev/null
+	for lab in CS452-LAB{1..4}; do
+		url="https://github.com/$stu/$lab.git"
+		if ! exists $url; then
+			echo "ERROR: $stu has not completed $lab"
+			echo "$stu $lab" >> $outfile
+			continue
+		fi
+		
+		if [ -d $lab ]; then
+			echo "Pull Lab: $lab"
+			pushd $lab > /dev/null
+				git pull 
+			popd > /dev/null
+		else
+			echo "Clone Lab: $lab"
+			git clone $url
+		fi
 	done
-	cd ..
-	let COUNT=COUNT-1
+	popd > /dev/null
 done
+
+exit 0
