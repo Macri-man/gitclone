@@ -12,15 +12,22 @@ if [ -f $outfile ]; then
 fi
 touch $outfile
 
-for stu in $(cat $1); do
-	echo "Student: $stu"
+N=2
+export IFS="$(echo -en '\n\b')"
+for item in $(cat $1); do
+	export IFS="$(echo -en ' \n\b') "
+	set -- $item
+	stu=$1
+	account=$2
+	export IFS="$(echo -en '\n\b')"
+	echo "Student: $stu :: $account"
 	mkdir -p $stu
 	pushd $stu > /dev/null
-	for lab in CS452-LAB{1..4} CS452-PROJECT{1}; do
-		url="https://github.com/$stu/$lab.git"
+	for lab in CS452-LAB{1..4} CS452-PROJECT1; do
+		url="https://github.com/$account/$lab.git"
 		if ! exists $url; then
-			echo "ERROR: $stu has not completed $lab"
-			echo "$stu $lab" >> $outfile
+			echo "ERROR: $stu with user-name $account has not forked $lab"
+			echo "$stu with user-name $account has not forked $lab" >> $outfile
 			continue
 		fi
 		
