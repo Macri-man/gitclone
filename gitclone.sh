@@ -16,7 +16,7 @@ for stu in $(cat $1); do
 	echo "Student: $stu"
 	mkdir -p $stu
 	pushd $stu > /dev/null
-	for lab in CS452-LAB{1..4} CS452-PROJECT{1}; do
+	for lab in CS452-LAB{1..4} CS452-PROJECT1; do
 		url="https://github.com/$stu/$lab.git"
 		if ! exists $url; then
 			echo "ERROR: $stu has not completed $lab"
