@@ -1,4 +1,5 @@
 #!/bin/bash
+# to execute ./gitclone.sh clonenames.txt not_finished.txt
 
 function exists() {
 	local url=$@
