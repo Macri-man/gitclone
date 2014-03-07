@@ -1,6 +1,6 @@
 #!/bin/bash
 #chmod +x gitclone.sh 
-# to execute ./gitclone.sh clonenames.txt not_finished.txt
+# to execute ./gitclone.sh clonenames.txt not_forked.txt
 
 function exists() {
 	local url=$@
