@@ -24,7 +24,7 @@ for item in $(cat $1); do
 	echo "Student: $stu :: $account"
 	mkdir -p $stu
 	pushd $stu > /dev/null
-	for lab in CS452-LAB{1..4} CS452-PROJECT1; do
+	for lab in CS452-LAB{1..6} CS452-PROJECT{1..2}; do
 		url="https://github.com/$account/$lab.git"
 		if ! exists $url; then
 			echo "ERROR: $stu with user-name $account has not forked $lab"
